@@ -2,6 +2,15 @@ const passport = require('passport');
 const googleStrategy = require('passport-google-oauth20');
 const keys = require('./keys.js');
 const User = require('../models/user-models.js');
+passport.serializeUser((user,done) => {
+    done(null,user.id);
+});
+passport.deserializeUser((id,done) => {
+    User.findById(id).then((user)=> {
+        done(null,user.id);
+    });
+    
+});
 passport.use(
     new googleStrategy({
     // option for google strat
@@ -14,12 +23,14 @@ passport.use(
     User.findOne({googleId: profile.id}).then((currentUser)=>{
         if (currentUser) {
             console.log('user is:',currentUser);
+            done(null,currentUser);
         } else {
             new User({ 
                 username: profile.displayName,
                 googleId: profile.id
             }).save().then((newUser) => {
                 console.log('new user added',newUser);
+                done(null,newUser);
             });
         }
     });
