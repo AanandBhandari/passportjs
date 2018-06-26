@@ -3,12 +3,13 @@ const Router = require('express').Router();
 const passport = require('passport');
 // auth login
 Router.get('/login', (req,res)=> {
-    res.render('login');
+    res.render('login',{user:req.user});
 });
 // auth logout
 Router.get('/logout',(req,res) => {
     // code handel with passport
-    res.send('logout route');
+    req.logout();
+    res.redirect('/');
 });
 // auth with google
 Router.get('/google',passport.authenticate('google',{
