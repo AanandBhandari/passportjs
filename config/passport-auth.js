@@ -1,6 +1,7 @@
 const passport = require('passport');
 const googleStrategy = require('passport-google-oauth20');
 const keys = require('./keys.js');
+const User = require('../models/user-models.js');
 passport.use(
     new googleStrategy({
     // option for google strat
@@ -11,7 +12,13 @@ passport.use(
     // passport callback function
     console.log(profile);
     console.log('helloworld');
-    console.log(accessToken);
+    new User({ 
+        username: profile.displayName,
+        googleId: profile.id
+    }).save().then((newUser) => {
+        console.log('new user added',newUser);
+    });
+    // console.log(accessToken);
     // done(null,profile);
 })
 );
