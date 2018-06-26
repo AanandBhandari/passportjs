@@ -8,8 +8,8 @@ const authCheak = (req,res,next) => {
     }
 }
 Router.get('/',authCheak,(req,res) => {
-    res.send(req.user.username);
-    // console.log(req);
+    // res.send(req.user.username);
+        res.render('profile',{user:req.user});
     // res.send('reached');
 });
 module.exports = Router;
